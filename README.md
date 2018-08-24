@@ -1,7 +1,7 @@
 # Terraform OpenVPN Module
 
 This terraform module deploys a very minimal OpenVPN to AWS. Intended to be cheap and disposable, so there are no niceties such as route53 records or http interface. It's currently based off of the [kylemanna/docker-openvpn](http://github.com/kylemanna/docker-openvpn) docker image, but this is configurable.
-You can and you should rebuild this image from scratch, since you can never trust a public registry.
+You can and you should rebuild this image from scratch, since you should never trust a public registry.
 
 # Example 
 
