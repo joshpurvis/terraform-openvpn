@@ -39,6 +39,6 @@ variable "vpc_cidr" {
 }
 
 variable "subnet_cidr" {
-  default = "10.1.0.0/24"
+  default = "10.1.1.0/24"
 }
 

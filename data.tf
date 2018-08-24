@@ -14,6 +14,8 @@ data "aws_ami" "ubuntu" {
     owners = ["099720109477"]  # Canonical
 }
 
+data "aws_availability_zones" "available" {}
+
 data "template_file" "openvpn_service" {
   template = "${file("${path.module}/openvpn.service")}"
 
