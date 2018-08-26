@@ -6,6 +6,10 @@ variable "client_name" {
   default = "terraform-openvpn-client"
 }
 
+variable "instance_name" {
+  default = "openvpn"
+}
+
 variable "docker_image" {
   default = "kylemanna/openvpn"
 }

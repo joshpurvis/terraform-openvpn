@@ -1,1 +1,8 @@
 *.ovpn
+vendor
+.idea
+.test-data
+.terraform
+terraform.tfstate
+terraform.tfvars
+*.tfstate*

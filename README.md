@@ -1,7 +1,11 @@
 # Terraform OpenVPN Module
 
-This terraform module deploys a very minimal OpenVPN to AWS. Intended to be cheap and disposable, so there are no niceties such as route53 records or http interface. It's currently based off of the [kylemanna/docker-openvpn](http://github.com/kylemanna/docker-openvpn) docker image, but this is configurable.
-You can and you should rebuild this image from scratch, since you should never trust a public registry.
+This terraform module deploys a very minimal OpenVPN to AWS. Because it's intended to be 
+cheap and disposable, there are no niceties such as route53 records or http interface. 
+It's currently based off of the 
+[kylemanna/docker-openvpn](http://github.com/kylemanna/docker-openvpn) docker image, but 
+this is configurable. You can and you should rebuild this image from scratch, since you 
+should never trust a public registry.
 
 # Example 
 
@@ -15,9 +19,9 @@ provider "aws" {
   region  = "eu-west-1"
 }
 
-"aws_key_pair" "deployer" {
+resource "aws_key_pair" "deployer" {
   key_name   = "deployer"
-  public_key = "${file("/home/josh/.ssh/deployer.pub")}"
+  public_key = "${file("~/.ssh/id_rsa.pub")}"
 }
 
 module "openvpn" {
@@ -25,9 +29,9 @@ module "openvpn" {
   aws_region        = "eu-west-1"
   aws_key_pair_name = "${aws_key_pair.deployer.key_name}"
 
-  # optional
-  #client_name      = "terraform-openvpn-client"   # useful with multiple VPNs in various regions
-  #docker_image     = "kylemanna/openvpn"          # you should never trust public docker images, so rebuild this yourself and put your registry here
+  #optional
+  #client_name      = "terraform-openvpn-client"
+  #docker_image     = "kylemanna/openvpn"
 }
 ```
 
@@ -38,7 +42,7 @@ terraform init
 terraform apply
 ```
 
-After which a file called `terraform-openvpn-client.ovpn` will be copied beside `main.tf`.
+Once finished, a file called `terraform-openvpn-client.ovpn` will be copied beside `main.tf`.
 
 ## Configure your local client using Network Manager
 

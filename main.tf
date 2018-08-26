@@ -1,3 +1,8 @@
+provider "aws" {
+  region = "${var.aws_region}"
+}
+
+
 resource "aws_instance" "openvpn" {
   ami                         = "${data.aws_ami.ubuntu.id}"
   instance_type               = "${var.instance_type}"
@@ -5,9 +10,10 @@ resource "aws_instance" "openvpn" {
   subnet_id                   = "${element(module.vpc.public_subnets, count.index)}"
   vpc_security_group_ids      = ["${aws_security_group.openvpn.id}"]
   associate_public_ip_address = true
+  user_data                   = "${data.template_file.user_data.rendered}"
 
   tags {
-    Name = "openvpn"
+    Name = "${var.instance_name}"
   }
 }
 
@@ -24,35 +30,17 @@ resource "null_resource" "provision_openvpn" {
     agent = true
   }
 
-  provisioner "file" {
-    content     = "${data.template_file.openvpn_service.rendered}"
-    destination = "~/docker.openvpn.service"
-  }
-
   provisioner "remote-exec" {
     inline = [
-      # HACK: copy file to permissioned area for provisioner.file per:
-      # https://github.com/hashicorp/terraform/issues/8238#issuecomment-240285760
-      "sudo cp ~/docker.openvpn.service /etc/systemd/system/docker.openvpn.service",
-
-      # wait for cloudinit to release dpkg/apt lock
-      "sleep 10 && while sudo fuser /var/lib/dpkg/lock /var/lib/apt/lists/lock /var/cache/apt/archives/lock >/dev/null 2>&1; do echo 'Waiting for release of dpkg/apt locks'; sleep 5; done;",
-
-      # install docker
-      "sudo apt-get install -y apt-transport-https ca-certificates",
-      "sudo apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D",
-      "echo \"deb https://apt.dockerproject.org/repo ubuntu-xenial main\" | sudo tee /etc/apt/sources.list.d/docker.list",
-      "sudo apt-get update",
-      "sudo apt-get install -y docker-engine",
-      "sudo service docker start",
-      "sudo usermod -aG docker $USER",
+      # wait for user_data script to finish
+      "while [ ! -f /tmp/terraform-openvpn-complete ]; do echo 'Waiting for user_data script to complete...'; sleep 2; done",
 
       # install openvpn via the kylemanna/openvpn docker image (configurable via variables)
       "sudo docker volume create openvpn-data",
       "sudo docker run -v openvpn-data:/etc/openvpn --rm ${var.docker_image} ovpn_genconfig -u udp://${aws_instance.openvpn.public_dns}:1194",
       "yes 'yes' | sudo docker run -v openvpn-data:/etc/openvpn --rm -i ${var.docker_image} ovpn_initpki nopass",
 
-      # configure systemd to manage docker container
+      # start service which was inject by user_data script
       "sudo systemctl start docker.openvpn.service",
       "sudo systemctl enable docker.openvpn.service",
 

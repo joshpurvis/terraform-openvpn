@@ -11,6 +11,6 @@ module "vpc" {
   public_subnets = ["${var.subnet_cidr}"]
 
   tags = {
-    Name = "openvpn"
+    Name = "${var.instance_name}"
   }
 }
