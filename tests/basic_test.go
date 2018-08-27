@@ -35,7 +35,7 @@ func TestOpenVPNInstance(t *testing.T) {
 		awsRegion := terraformOptions.Vars["aws_region"].(string)
 		instanceId := terraform.Output(t, terraformOptions, "instance_id")
 		publicIP := terraform.Output(t, terraformOptions, "public_ip")
-	    uniqueName := test_structure.LoadString(t, terraformDirectory, "uniqueName")
+		uniqueName := test_structure.LoadString(t, terraformDirectory, "uniqueName")
 
 		// confirm that random name was properly applied as a tag
 		instanceTags := aws.GetTagsForEc2Instance(t, awsRegion, instanceId)
