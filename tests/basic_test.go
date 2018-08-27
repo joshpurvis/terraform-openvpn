@@ -5,7 +5,6 @@ import (
 	"github.com/gruntwork-io/terratest/modules/terraform"
 	"github.com/gruntwork-io/terratest/modules/test-structure"
 	"github.com/stretchr/testify/assert"
-	"path/filepath"
 	"testing"
 )
 
@@ -42,10 +41,6 @@ func TestOpenVPNInstance(t *testing.T) {
 		nameTag, containsNameTag := instanceTags["Name"]
 		assert.True(t, containsNameTag)
 		assert.Equal(t, uniqueName, nameTag)
-
-		// confirm that an ovpn file was SCP'd from vpn server
-		dir, _ := filepath.Abs(terraformDirectory)
-		assert.FileExists(t, filepath.Join(dir, "terratest-openvpn.ovpn"))
 
 		// test the ovpn file by actually running openvpn via docker container
 		openvpnConnectionTest(t, terraformDirectory, publicIP)

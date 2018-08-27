@@ -44,6 +44,10 @@ func openvpnConnectionTest(t *testing.T, terraformDirectory string, publicIP str
 	// connects to openvpn server using generated ovpn file, and checks its actual ip
 	// using http://ifconfig.co, to confirm it matches publicIP from terraform outputs.
 
+	// confirm that an ovpn file was SCP'd from vpn server
+	absoluteTerraformDirectory, _ := filepath.Abs(terraformDirectory)
+	assert.FileExists(t, filepath.Join(absoluteTerraformDirectory, "terratest-openvpn.ovpn"))
+
 	uniqueName := test_structure.LoadString(t, terraformDirectory, "uniqueName")
 
 	// create parent container, which maintains connection to the vpn
@@ -55,7 +59,7 @@ func openvpnConnectionTest(t *testing.T, terraformDirectory string, publicIP str
 		"--cap-add=NET_ADMIN",
 		"--dns=8.8.8.8",
 		"--device=/dev/net/tun",
-		fmt.Sprintf("-v=%s:/vpn", terraformDirectory),
+		fmt.Sprintf("-v=%s:/vpn", absoluteTerraformDirectory),
 		"dperson/openvpn-client",
 	})
 
