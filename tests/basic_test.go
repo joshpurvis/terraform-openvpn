@@ -13,11 +13,17 @@ func TestOpenVPNInstance(t *testing.T) {
 
 	terraformDirectory := "../"
 
+	defer test_structure.RunTestStage(t, "teardown", func() {
+		terraformOptions := test_structure.LoadTerraformOptions(t, terraformDirectory)
+		ec2KeyPair := test_structure.LoadEc2KeyPair(t, terraformDirectory)
+		terraform.Destroy(t, terraformOptions)
+		aws.DeleteEC2KeyPair(t, ec2KeyPair)
+	})
+
 	test_structure.RunTestStage(t, "setup", func() {
 
-		// setup basic terraform options, generate ec2 keypair, and start the agent
-		terraformOptions, ec2KeyPair := configureTerraformOptions(t, terraformDirectory)
-		sshAgent := sshAgentWithKeyPair(t, ec2KeyPair.KeyPair)
+		// setup basic terraform options, generate ec2 keypair, and sshAgent
+		terraformOptions, ec2KeyPair, sshAgent := configureTerraformOptions(t, terraformDirectory)
 		defer sshAgent.Stop()
 
 		// save for later steps
@@ -47,11 +53,6 @@ func TestOpenVPNInstance(t *testing.T) {
 
 	})
 
-	defer test_structure.RunTestStage(t, "teardown", func() {
-		terraformOptions := test_structure.LoadTerraformOptions(t, terraformDirectory)
-		ec2KeyPair := test_structure.LoadEc2KeyPair(t, terraformDirectory)
-		terraform.Destroy(t, terraformOptions)
-		aws.DeleteEC2KeyPair(t, ec2KeyPair)
-	})
+
 
 }

@@ -2,7 +2,7 @@
 
 
 [[projects]]
-  digest = "1:c03865c02526f818f49cff3516d9e494789f701bdffd87986c1310a0569b60d4"
+  digest = "1:ff32e8c80bb30c9298863617d7fd8fe9bde4850a97eda356b2142f04dc2699b7"
   name = "github.com/aws/aws-sdk-go"
   packages = [
     "aws",
@@ -51,8 +51,8 @@
     "service/sts",
   ]
   pruneopts = "UT"
-  revision = "ea2d2b9a8808d0c390d966daf855a7b3b74bc44e"
-  version = "v1.15.19"
+  revision = "7715ed93fca215da2c707088a0cca5646ad91543"
+  version = "v1.15.24"
 
 [[projects]]
   digest = "1:7b94d37d65c0445053c6f3e73090e3966c1c29127035492c349e14f25c440359"
@@ -91,7 +91,7 @@
   version = "0.2"
 
 [[projects]]
-  digest = "1:5364d8255844ec20085d19606fe88daaa2829cfdb252392632faa63b95b98d23"
+  digest = "1:7efae1919eb7e8f140cca69707f2120d7b36af92104008c95ebba749f68aaeb5"
   name = "github.com/gruntwork-io/terratest"
   packages = [
     "modules/aws",
@@ -107,8 +107,8 @@
     "modules/test-structure",
   ]
   pruneopts = "UT"
-  revision = "d800338b3e88d65e5a434ec9a6ab1242270edda6"
-  version = "v0.10.0"
+  revision = "1b725e7128a7a57e776463893e2ca750027cb2a1"
+  version = "v0.10.2"
 
 [[projects]]
   digest = "1:e22af8c7518e1eab6f2eab2b7d7558927f816262586cd6ed9f349c97a6c285c4"
@@ -168,14 +168,13 @@
   name = "golang.org/x/net"
   packages = ["context"]
   pruneopts = "UT"
-  revision = "4bcd98cce591d8c7061bf313d7a3cbad05b58549"
+  revision = "8a410e7b638dca158bf9e766925842f6651ff828"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
     "github.com/gruntwork-io/terratest/modules/aws",
-    "github.com/gruntwork-io/terratest/modules/logger",
     "github.com/gruntwork-io/terratest/modules/random",
     "github.com/gruntwork-io/terratest/modules/shell",
     "github.com/gruntwork-io/terratest/modules/ssh",

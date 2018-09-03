@@ -42,7 +42,7 @@ terraform init
 terraform apply
 ```
 
-Once finished, a file called `terraform-openvpn-client.ovpn` will be copied beside `main.tf`.
+Once finished, a file called `terraform-openvpn-client.ovpn` will be copied to the working directory.
 
 ## Configure your local client using Network Manager
 
