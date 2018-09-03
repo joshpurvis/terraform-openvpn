@@ -19,10 +19,7 @@ CLIENT_NAME=$(terraform output openvpn_config)
 # add to known hosts
 ssh-keygen -R ${PUBLIC_IP} && ssh-keyscan -H ${PUBLIC_IP} >> ~/.ssh/known_hosts
 
-# scp the ovpn file
-scp ubuntu@${PUBLIC_IP}:~/${CLIENT_NAME} ${CLIENT_NAME}
-
-OPENVPN_PID=$(sudo openvpn ${CLIENT_NAME})
+sudo openvpn ${CLIENT_NAME}
 
 # remove deployer key
 ssh-add -D ${DEPLOYER_KEY}
