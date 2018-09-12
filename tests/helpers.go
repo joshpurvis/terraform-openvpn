@@ -26,6 +26,8 @@ type SSHAgent struct {
 }
 
 func dockerCommand(t *testing.T, args []string) string {
+	t.Helper()
+
 	output, _ := shell.RunCommandAndGetOutputE(t, shell.Command{
 		Command: "docker",
 		Args:    args,
@@ -35,6 +37,8 @@ func dockerCommand(t *testing.T, args []string) string {
 }
 
 func openvpnConnectionTest(t *testing.T, terraformDirectory string, publicIP string) {
+	t.Helper()
+
 	// connects to openvpn server using generated ovpn file, and checks its actual ip
 	// using http://ifconfig.co, to confirm it matches publicIP from terraform outputs.
 
@@ -93,6 +97,7 @@ func openvpnConnectionTest(t *testing.T, terraformDirectory string, publicIP str
 }
 
 func configureTerraformOptions(t *testing.T, terraformDirectory string) (*terraform.Options, *aws.Ec2Keypair, *ssh.SshAgent) {
+	t.Helper()
 
 	// randomize instance name
 	uniqueId := random.UniqueId()
